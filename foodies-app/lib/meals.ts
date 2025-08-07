@@ -14,3 +14,7 @@ export const getMeals = async (): Promise<Meal[]> => {
 export const getCachedMeals = unstable_cache(getMeals, [], {
   revalidate: 60,
 });
+
+export const getMeal = (slug: string): Meal | undefined => {
+  return db.prepare('SELECT * FROM meals WHERE slug = ?').get(slug) as Meal | undefined;
+};
