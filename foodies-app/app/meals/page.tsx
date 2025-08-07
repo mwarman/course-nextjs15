@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import classes from './page.module.css';
 import MealsGrid from '@/components/meals/meals-grid';
-import { getCachedMeals, getMeals } from '@/lib/meals';
+import { getCachedMeals } from '@/lib/meals';
 
 const Meals = async () => {
   const meals = await getCachedMeals();
