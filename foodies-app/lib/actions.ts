@@ -21,6 +21,7 @@ export const shareMeal = async (prevState: ShareMealActionState, formData: FormD
     image: formData.get('image') as File,
   };
 
+  // Validate form data - Find a better approach :)
   if (
     isEmpty(meal.title) ||
     isEmpty(meal.summary) ||
