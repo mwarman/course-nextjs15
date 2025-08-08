@@ -1,7 +1,36 @@
 import ImagePicker from '@/components/meals/image-picker';
 import classes from './page.module.css';
+import { Meal } from '@/models/meals';
 
 const ShareMealPage = () => {
+  const handleFormSubmit = async (formData: FormData) => {
+    'use server';
+    // Handle form submission
+
+    const title = formData.get('title') as string;
+    const slug = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Remove non-word characters except spaces and hyphens
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-'); // Replace multiple hyphens with single
+
+    // You can now use `slug` below
+
+    const meal: Meal = {
+      id: crypto.randomUUID(),
+      creator: formData.get('name') as string,
+      creator_email: formData.get('email') as string,
+      slug,
+      title,
+      summary: formData.get('summary') as string,
+      instructions: formData.get('instructions') as string,
+      image: formData.get('image') as string,
+    };
+
+    console.log(meal);
+  };
+
   return (
     <>
       <header className={classes.header}>
@@ -11,7 +40,7 @@ const ShareMealPage = () => {
         <p>Or any other meal you feel needs sharing!</p>
       </header>
       <main className={classes.main}>
-        <form className={classes.form}>
+        <form className={classes.form} action={handleFormSubmit}>
           <div className={classes.row}>
             <p>
               <label htmlFor="name">Your name</label>
