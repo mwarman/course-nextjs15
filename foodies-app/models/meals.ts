@@ -8,3 +8,7 @@ export interface Meal {
   creator: string;
   creator_email: string;
 }
+
+export interface MealFormData extends Omit<Meal, 'id' | 'slug' | 'image'> {
+  image: File;
+}
