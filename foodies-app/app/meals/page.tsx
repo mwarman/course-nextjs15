@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 import classes from './page.module.css';
 import MealsGrid from '@/components/meals/meals-grid';
-import { getCachedMeals } from '@/lib/meals';
+import { getMeals } from '@/lib/meals';
 
 const Meals = async () => {
-  const meals = await getCachedMeals();
+  const meals = await getMeals();
   return <MealsGrid meals={meals} />;
 };
 
