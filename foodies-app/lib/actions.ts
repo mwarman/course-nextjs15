@@ -1,11 +1,17 @@
 'use server';
 
-import { MealFormData } from '@/models/meals';
-import { saveMeal } from './meals';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import isEmpty from 'lodash/isEmpty';
 
-export const shareMeal = async (formData: FormData) => {
+import { MealFormData } from '@/models/meals';
+import { saveMeal } from './meals';
+
+export interface ShareMealActionState {
+  message?: string;
+}
+
+export const shareMeal = async (prevState: ShareMealActionState, formData: FormData): Promise<ShareMealActionState> => {
   const meal: MealFormData = {
     creator: formData.get('name') as string,
     creator_email: formData.get('email') as string,
@@ -14,6 +20,21 @@ export const shareMeal = async (formData: FormData) => {
     instructions: formData.get('instructions') as string,
     image: formData.get('image') as File,
   };
+
+  if (
+    isEmpty(meal.title) ||
+    isEmpty(meal.summary) ||
+    isEmpty(meal.instructions) ||
+    isEmpty(meal.creator) ||
+    isEmpty(meal.creator_email) ||
+    !meal.creator_email.includes('@') ||
+    !meal.image ||
+    meal.image.size === 0
+  ) {
+    return {
+      message: 'Please fill out all fields correctly.',
+    };
+  }
 
   await saveMeal(meal);
   revalidatePath('/meals');
