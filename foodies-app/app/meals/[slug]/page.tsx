@@ -1,8 +1,27 @@
+import { Metadata } from 'next';
 import Image from 'next/image';
 
 import classes from './page.module.css';
 import { getMeal } from '@/lib/meals';
 import { notFound } from 'next/navigation';
+
+/**
+ * Generate dynamic metadata for the meal detail page.
+ * @param props - The props containing the parameters for the page.
+ * @param props.params - A promise that resolves to an object containing the meal slug.
+ * @returns The metadata for the meal detail page.
+ */
+export const generateMetadata = async ({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> => {
+  const { slug } = await params;
+  const meal = getMeal(slug);
+  if (!meal) {
+    notFound();
+  }
+  return {
+    title: meal.title,
+    description: meal.summary,
+  };
+};
 
 const MealDetailPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
